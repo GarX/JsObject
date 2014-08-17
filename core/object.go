@@ -1,6 +1,8 @@
 package core
 
 import (
+	"reflect"
+
 	"github.com/GarX/JsObject/util"
 )
 
@@ -61,7 +63,26 @@ func (this *JsObject) GetIndex(index int) *JsObject {
 		return nil
 	}
 	return v[index]
+}
 
+// Run() calls the function.
+// If the value cannot be called, it reutrns a nil slice.
+func (this *JsObject) Run(args ...interface{}) (ret []*JsObject) {
+	if !util.IsFunc(this.value) {
+		return
+	}
+	ret = make([]*JsObject, 0)
+	refValue := reflect.ValueOf(this.value)
+	refArgs := make([]reflect.Value, 0)
+	for i := 0; i < len(args); i++ {
+		refarg := reflect.ValueOf(args[i])
+		refArgs = append(refArgs, refarg)
+	}
+	refReturn := refValue.Call(refArgs)
+	for i := 0; i < len(refReturn); i++ {
+		ret = append(ret, &JsObject{refReturn[i].Interface()})
+	}
+	return
 }
 
 func (this *JsObject) Bool() bool {

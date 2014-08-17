@@ -18,7 +18,10 @@ func TestMap(t *testing.T) {
 	println(obj.Get("d").Uint())
 	println(obj.Get("e").Bool())
 	println(obj.Get(1).String())
+}
 
+func TestArray(t *testing.T) {
+	obj := JsObject{}
 	obj.Array("a", "b", 1, 2, true, "100", 50)
 	obj.SetIndex(7, "abcd")
 	println(obj.GetIndex(0).String())
@@ -29,5 +32,14 @@ func TestMap(t *testing.T) {
 	println(obj.GetIndex(5).String())
 	println(obj.GetIndex(6).Int())
 	println(obj.GetIndex(7).String())
+}
 
+func TestFunc(t *testing.T) {
+	obj := JsObject{}
+	obj.Value(func(str string) string {
+		println(str)
+		return str + "2"
+	})
+	ret := obj.Run("bjl")
+	println(ret[0].String())
 }

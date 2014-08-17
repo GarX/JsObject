@@ -2,14 +2,16 @@ package util
 
 import "reflect"
 
-func IsMap(v reflect.Value) bool {
+func IsMap(i interface{}) bool {
+	v := reflect.ValueOf(i)
 	if v.Kind().String() == "map" {
 		return true
 	}
 	return false
 }
 
-func IsArray(v reflect.Value) bool {
+func IsArray(i interface{}) bool {
+	v := reflect.ValueOf(i)
 	if v.Kind().String() == "slice" {
 		return true
 	}

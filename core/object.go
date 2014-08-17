@@ -1,8 +1,6 @@
 package core
 
 import (
-	"reflect"
-
 	"github.com/GarX/JsObject/util"
 )
 
@@ -15,25 +13,17 @@ func (this *JsObject) Value(v interface{}) {
 }
 
 func (this *JsObject) Set(key interface{}, value interface{}) {
-	refthis := reflect.ValueOf(this.value)
-	if !util.IsMap(refthis) {
+	if !util.IsMap(this.value) {
 		this.value = make(map[interface{}]*JsObject)
-		refthis = reflect.ValueOf(this.value)
 	}
-	obj := &(JsObject{value})
-	refKey := reflect.ValueOf(&key).Elem()
-	refValue := reflect.ValueOf(&obj).Elem()
-	refthis.SetMapIndex(refKey, refValue)
+	(this.value.(map[interface{}]*JsObject))[key] = &(JsObject{value})
 }
 
 func (this *JsObject) Get(key interface{}) *JsObject {
-	refthis := reflect.ValueOf(this.value)
-	if !util.IsMap(refthis) {
+	if !util.IsMap(this.value) {
 		return nil
 	}
-	refKey := reflect.ValueOf(&key).Elem()
-	refValue := refthis.MapIndex(refKey)
-	return refValue.Interface().(*JsObject)
+	return (this.value.(map[interface{}]*JsObject))[key]
 }
 
 func (this *JsObject) Array(elements ...interface{}) {
@@ -43,6 +33,35 @@ func (this *JsObject) Array(elements ...interface{}) {
 		array[i] = obj
 	}
 	this.value = array
+}
+
+func (this *JsObject) SetIndex(index int, value interface{}) {
+	if !util.IsArray(this.value) {
+		array := make([]*JsObject, index+1)
+		array[index] = &JsObject{value}
+		this.value = array
+		return
+	} else {
+		v := this.value.([]*JsObject)
+		if l := len(v); l <= index {
+			sliceToAppend := make([]*JsObject, index-l+1)
+			this.value = append(v, sliceToAppend...)
+			v = this.value.([]*JsObject)
+		}
+		v[index] = &JsObject{value}
+	}
+}
+
+func (this *JsObject) GetIndex(index int) *JsObject {
+	if !util.IsArray(this.value) {
+		return nil
+	}
+	v := this.value.([]*JsObject)
+	if l := len(v); l <= index {
+		return nil
+	}
+	return v[index]
+
 }
 
 func (this *JsObject) Bool() bool {

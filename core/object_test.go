@@ -18,6 +18,8 @@ func TestMap(t *testing.T) {
 	println(obj.Get("d").Uint())
 	println(obj.Get("e").Bool())
 	println(obj.Get(1).String())
+	obj.Set(10, "10000")
+	println(obj.Len())
 }
 
 func TestArray(t *testing.T) {
@@ -32,6 +34,8 @@ func TestArray(t *testing.T) {
 	println(obj.GetIndex(5).String())
 	println(obj.GetIndex(6).Int())
 	println(obj.GetIndex(7).String())
+	obj.Append("efg")
+	println(obj.Len())
 }
 
 func TestFunc(t *testing.T) {

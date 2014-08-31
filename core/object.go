@@ -15,10 +15,14 @@ func (this *JsObject) Value(v interface{}) {
 }
 
 func (this *JsObject) Set(key interface{}, value interface{}) {
+	this.JsSet(key, &(JsObject{value}))
+}
+
+func (this *JsObject) JsSet(key interface{}, value *JsObject) {
 	if !util.IsMap(this.value) {
 		this.value = make(map[interface{}]*JsObject)
 	}
-	(this.value.(map[interface{}]*JsObject))[key] = &(JsObject{value})
+	(this.value.(map[interface{}]*JsObject))[key] = value
 }
 
 func (this *JsObject) Get(key interface{}) *JsObject {
@@ -31,16 +35,19 @@ func (this *JsObject) Get(key interface{}) *JsObject {
 func (this *JsObject) Array(elements ...interface{}) {
 	array := make([]*JsObject, len(elements))
 	for i := 0; i < len(elements); i++ {
-		obj := &JsObject{elements[i]}
-		array[i] = obj
+		array[i] = &JsObject{elements[i]}
 	}
-	this.value = array
+	this.JsArray(array...)
 }
 
-func (this *JsObject) SetIndex(index int, value interface{}) {
+func (this *JsObject) JsArray(elements ...*JsObject) {
+	this.value = elements
+}
+
+func (this *JsObject) JsSetIndex(index int, value *JsObject) {
 	if !util.IsArray(this.value) {
 		array := make([]*JsObject, index+1)
-		array[index] = &JsObject{value}
+		array[index] = value
 		this.value = array
 		return
 	} else {
@@ -50,8 +57,12 @@ func (this *JsObject) SetIndex(index int, value interface{}) {
 			this.value = append(v, sliceToAppend...)
 			v = this.value.([]*JsObject)
 		}
-		v[index] = &JsObject{value}
+		v[index] = value
 	}
+}
+
+func (this *JsObject) SetIndex(index int, value interface{}) {
+	this.JsSetIndex(index, &JsObject{value})
 }
 
 func (this *JsObject) GetIndex(index int) *JsObject {
@@ -63,6 +74,31 @@ func (this *JsObject) GetIndex(index int) *JsObject {
 		return nil
 	}
 	return v[index]
+}
+
+func (this *JsObject) Len() int {
+	if util.IsArray(this.value) {
+		v := this.value.([]*JsObject)
+		return len(v)
+	}
+	if util.IsMap(this.value) {
+		v := this.value.(map[interface{}]*JsObject)
+		return len(v)
+	}
+	return 0
+}
+
+func (this *JsObject) Append(value interface{}) {
+	this.JsAppend(&JsObject{value})
+}
+
+func (this *JsObject) JsAppend(value *JsObject) {
+	if !util.IsArray(this.value) {
+		return
+	}
+	v := this.value.([]*JsObject)
+	v = append(v, value)
+	this.value = v
 }
 
 // Run() calls the function.

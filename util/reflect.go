@@ -4,24 +4,14 @@ import "reflect"
 
 func IsMap(i interface{}) bool {
 	v := reflect.ValueOf(i)
-	if v.Kind().String() == "map" {
-		return true
-	}
-	return false
+	return v.Kind().String() == "map"
 }
-
 func IsArray(i interface{}) bool {
 	v := reflect.ValueOf(i)
-	if v.Kind().String() == "slice" {
-		return true
-	}
-	return false
+	return v.Kind().String() == "slice"
 }
 
 func IsFunc(i interface{}) bool {
 	v := reflect.ValueOf(i)
-	if v.Kind().String() == "func" {
-		return true
-	}
-	return false
+	return v.Kind().String() == "func"
 }

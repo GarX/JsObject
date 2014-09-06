@@ -35,15 +35,15 @@ func TestArray(t *testing.T) {
 	println(obj.GetIndex(6).Int())
 	println(obj.GetIndex(7).String())
 	obj.Append("efg")
+	println(obj.GetIndex(8).String())
 	println(obj.Len())
 }
 
 func TestFunc(t *testing.T) {
-	obj := JsObject{}
-	obj.Value(func(str string) string {
+	obj := JsObject{func(str string) string {
 		println(str)
 		return str + "2"
-	})
+	}}
 	ret := obj.Run("bjl")
 	println(ret[0].String())
 }

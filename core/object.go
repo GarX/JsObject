@@ -10,8 +10,8 @@ type JsObject struct {
 	value interface{}
 }
 
-func (this *JsObject) Value(v interface{}) {
-	this.value = v
+func (this *JsObject) Value() interface{} {
+	return this.value
 }
 
 func (this *JsObject) Set(key interface{}, value interface{}) {

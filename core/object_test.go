@@ -25,17 +25,17 @@ func TestMap(t *testing.T) {
 func TestArray(t *testing.T) {
 	obj := JsObject{}
 	obj.Array("a", "b", 1, 2, true, "100", 50)
-	obj.SetIndex(7, "abcd")
-	println(obj.GetIndex(0).String())
-	println(obj.GetIndex(1).String())
-	println(obj.GetIndex(2).Int())
-	println(obj.GetIndex(3).Int())
-	println(obj.GetIndex(4).Bool())
-	println(obj.GetIndex(5).String())
-	println(obj.GetIndex(6).Int())
-	println(obj.GetIndex(7).String())
+	obj.SetByIndex(7, "abcd")
+	println(obj.GetByIndex(0).String())
+	println(obj.GetByIndex(1).String())
+	println(obj.GetByIndex(2).Int())
+	println(obj.GetByIndex(3).Int())
+	println(obj.GetByIndex(4).Bool())
+	println(obj.GetByIndex(5).String())
+	println(obj.GetByIndex(6).Int())
+	println(obj.GetByIndex(7).String())
 	obj.Append("efg")
-	println(obj.GetIndex(8).String())
+	println(obj.GetByIndex(8).String())
 	println(obj.Len())
 }
 
